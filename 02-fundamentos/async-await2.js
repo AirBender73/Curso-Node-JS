@@ -55,7 +55,7 @@ let getInformacion = async (id) => {
     return `${resp.nombre} tiene salario de ${resp.salario}`;
 };
 
-getInformacion(4)
+getInformacion(1)
     .then(mensaje => console.log(mensaje))
     .catch(err => console.log(err)
     );
