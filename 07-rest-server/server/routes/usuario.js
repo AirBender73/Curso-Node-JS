@@ -7,7 +7,12 @@ const _ = require('underscore');
 
 const Usuario = require('../models/usuario');
 
-app.get('/usuario', function (req, res) {
+const { verificaToken, verifica_AdminRole } = require('../middlewares/autenticacion');
+
+// --------- GET | OBTENER TODOS LOS USUARIOS
+// {verificaToken}: Middleware (sigue la función gracias al next() )
+app.get('/usuario', verificaToken, (req, res) => {
+
 
     let desde = req.query.desde || 0;
     desde = Number(desde);
@@ -40,7 +45,10 @@ app.get('/usuario', function (req, res) {
 
 });
 
-app.post('/usuario', function (req, res) {
+
+// --------- POST | CREAR UN USUARIO
+app.post('/usuario', [verificaToken, verifica_AdminRole], (req, res) => {
+
 
     let body = req.body;
 
@@ -85,7 +93,9 @@ app.post('/usuario', function (req, res) {
 
 });
 
-app.put('/usuario/:id', function (req, res) {
+
+// --------- PUT | ACTUALIZA UN USUARIO
+app.put('/usuario/:id', [verificaToken, verifica_AdminRole], (req, res) => {
 
     let id = req.params.id;
     let body = _.pick(req.body, ['nombre', 'email', 'img', 'role', 'estado']);
@@ -111,7 +121,9 @@ app.put('/usuario/:id', function (req, res) {
 
 });
 
-app.delete('/usuario/:id/', function (req, res) {
+
+// --------- DELETE | CAMBIA EL ESTADO DEL USUARIO (LO COMENTADO SÍ LO ELIMINA)
+app.delete('/usuario/:id/', [verificaToken, verifica_AdminRole], (req, res) => {
 
     let id = req.params.id;
     let usuarioEliminado = {
